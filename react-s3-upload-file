@@ -1,0 +1,29 @@
+    import S3 from 'react-aws-s3'
+    
+    const config = {
+        bucketName: 'glambucket',
+        region: 'us-east-2',
+        accessKeyId: AWS_ACCESS_KEY,
+        secretAccessKey: AWS_SECRET_KEY,
+    }
+    const c = async()=> {
+        dispatch(reset_errors())
+        dispatch(set_is_loading(true))
+
+        const ReactS3Client = new S3(config)
+        let split_name = business.name.split(' ').join('')
+        let name = `${split_name}__profile_image`
+        
+        ReactS3Client
+            .uploadFile(business.image, name)
+            .then(async (data) => {
+                console.log('uploaded file')
+                console.log(data)
+                await create_business()
+            })
+            .catch(err => {
+                console.error('error')
+                console.error(err)
+                dispatch(set_is_loading(false))
+            })
+    }
